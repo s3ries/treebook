@@ -39,6 +39,17 @@ end
     assert_redirected_to status_path(assigns(:status))
   end
 
+  test "should create status for the current user when logged in" do
+    sign_in users(:xuzonne)
+
+    assert_difference('Status.count') do
+      post :create, status: { content: @status.content, user_id: users(:karahui).id}
+    end
+
+    assert_redirected_to status_path(assigns(:status))
+    assert_equal assigns(:status).user_id, users(:xuzonne).id
+  end
+
   test "should show status" do
     get :show, id: @status
     assert_response :success
@@ -50,7 +61,7 @@ end
     assert_response :success
   end
 
-test "should redirect status updates when logged in" do
+test "should redirect status updates when not logged in" do
   put :update, id: @status, status: { content: @status.content}
   assert_response :redirect
   assert_redirected_to new_user_session_path
@@ -62,6 +73,20 @@ end
     assert_redirected_to status_path(assigns(:status))
   end
 
+ test "should update status for when the current user when logged in" do
+    sign_in users(:xuzonne)
+    put :update, id: @status, status: { content: @status.content, user_id: users(:karahui).id}
+    assert_redirected_to status_path(assigns(:status))
+    assert_equal assigns(:status).user_id, users(:xuzonne).id 
+  end
+
+ test "should not update the status if nothing ahs changed" do
+    sign_in users(:xuzonne)
+    put :update, id: @status
+    assert_redirected_to status_path(assigns(:status))
+    assert_equal assigns(:status).user_id, users(:xuzonne).id 
+  end
+
   test "should destroy status" do
     assert_difference('Status.count', -1) do
       delete :destroy, id: @status
@@ -69,4 +94,6 @@ end
 
     assert_redirected_to statuses_path
   end
+
+
 end
