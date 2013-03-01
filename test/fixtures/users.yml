@@ -9,3 +9,9 @@ karahui:
   last_name: "Hui"
   email: "kara@voxylabs.com"
   profile_name: "karahui"
+
+park:
+  first_name: "Park"
+  last_name: "Onigiri"
+  email: "engpark.aw@voxylabs.com"
+  profile_name: "park"
